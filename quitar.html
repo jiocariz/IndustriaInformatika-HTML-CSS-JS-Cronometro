@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    
+    
+    
+    
+    
+    <meta http-equiv="Content-Language" content="es">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <link rel="stylesheet" type="text/css" href="estilos/estilos.css" />
+    <script type="text/javascript">
+        //Actualizamos el contador a tiempos fijos
+        window.addEventListener('load', (event) => {        
+            setInterval(actualizar, 500);    
+            console.log('page is fully loaded');
+        });
+
+        
+        let startBtn = document.getElementById("botonStart");
+
+        startBtn.addEventListener("click", (event) => {
+            sendPOST(document.getElementById('arranca'));
+        });
+
+        let stopBtn = document.getElementById("botonStop");
+
+        stopBtn.addEventListener("click", (event) => {
+            sendPOST(document.getElementById('para'));
+        });
+
+        let resetBtn = document.getElementById("botonReset");
+
+        resetBtn.addEventListener("click", (event) => {
+            sendPOST(document.getElementById('reinicia'));
+        });
+
+        function sendPOST(form) {
+            //Le pasa directamente los parámetros contenidos en el FORM
+            const data = new FormData(form);
+            /*Si necesitáramos crear el data a mano:
+             const data = new FormData();
+            data.append('empresa', 'DesarrolloWeb.com');
+            data.append('CIF', 'ESB00001111');
+            data.append('formacion_profesional', 'EscuelaIT'); */
+            curURL = window.location.href;
+            fetch(curURL, {
+                method: 'POST',
+                body: data
+            })
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.text()
+                    } else {
+                        throw "Error en la llamada Ajax";
+                    }
+
+                })
+                .then(function (texto) {
+                    console.log(texto);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        }
+
+        function actualizar() {
+            $("#tiempos").load("tiempos.html");
+            $("#textos").load("texto.html");
+        }
+    </script>
+
+</head>
+
+
+<title>Cronometro</title>
+
+<body>
+
+
+    <div id="ps"><img width="10%"
+            src="https://image.shutterstock.com/image-vector/iron-stopwatch-counts-time-catch-260nw-1709422597.jpg"></img>
+    </div>
+    <div id="textos"></div>
+    <div id="tiempos"></div>
+    <div id="botones">
+        <table>
+            <tr>
+                <td>
+                    <form method="post" action="" id="arranca" name="arranca">
+                        <input type="submit" value="Start" id="botonStart">
+                        <input type="hidden" name='"Start"' value="1">
+                        <input type="hidden" name='"Stop"' value="0">
+                        <input type="hidden" name='"P_marcha"' value="1">
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="" id="para" name="para">
+                        <input type="submit" value="Stop" id="botonStop">
+                        <input type="hidden" name='"Stop"' value="1">
+                        <input type="hidden" name='"Start"' value="0">
+                        <input type="hidden" name='"P_marcha"' value="0">
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="" id="reinicia" name="reinicia">
+                        <input type="submit" value="Reset" id="botonReset">
+                        <input type="hidden" name='"Reset"' value="1">
+                        <input type="hidden" name='"P_marcha"' value="1">
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+</body>
+</body>
+
+</html>

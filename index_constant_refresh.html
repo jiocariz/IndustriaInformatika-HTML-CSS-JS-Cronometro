@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <!-- AWP_In_Variable Name='"Start"' -->
+        <!-- AWP_In_Variable Name='"Stop"' -->
+        <!-- AWP_In_Variable Name='"Reset"' -->
+        <!-- AWP_Enum_Def Name="listado" Values='0:"PARADO", 1:"CRONOMETRANDO", 2:"PUESTA A CERO"' -->
+        <!-- AWP_Enum_Ref Name='"Cronometro"' Enum="listado" -->
+        <meta http-equiv="Content-Language" content="es" >
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+        <meta http-equiv="Content-Script-Type" content="text/javascript" >
+        <link rel="stylesheet" type="text/css" href="estilos/estilos.css"/>
+        <meta http-equiv="refresh" content="1" />  
+          
+        </head>
+      
+
+<title>Cronometro</title>
+
+ <body>
+ 
+ 
+	<div id="ps"><img width="10%" src="https://image.shutterstock.com/image-vector/iron-stopwatch-counts-time-catch-260nw-1709422597.jpg"></img></div>
+	<div id="textos">:="Cronometro":</div>
+	<div id="tiempos"><h1 id="cronometro" >:="Minutos": : :="Segundos": : :="Milisegundos":</h1></div>
+	<div id="botones">
+		<table>
+			<tr>
+			<td>
+				<form method="post" action="" id="arranca" name="arranca">
+					<input type="submit" value="Start" id="boton">
+					<input type="hidden" name='"Start"' value="1">
+					<input type="hidden" name='"Stop"' value="0">
+				</form>
+			</td>
+			<td>
+				<form method="post" action="" id="para" name="para">
+					<input type="submit" value="Stop" id="boton">
+					<input type="hidden" name='"Stop"' value="1"> 
+					<input type="hidden" name='"Start"' value="0">
+				</form>
+			</td>
+			<td>
+				<form method="post" action="" id="reinicia" name="reinicia">
+					<input type="submit" value="Reset" id="boton">
+					<input type="hidden" name='"Reset"' value="1"> 
+				</form>
+			</td>
+			</tr>
+		</table>
+	</div>
+
+    
+  </body>
+  </body>
+
+</html>

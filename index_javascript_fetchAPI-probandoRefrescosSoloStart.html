@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- AWP_In_Variable Name='"Start"' -->
+    <!-- AWP_In_Variable Name='"Stop"' -->
+    <!-- AWP_In_Variable Name='"Reset"' -->
+    <!-- AWP_In_Variable Name='"P_marcha"' -->
+    <!-- AWP_In_Variable Name='"Minutos"' -->
+    <!-- AWP_In_Variable Name='"Segundos"' -->
+    <!-- AWP_Enum_Def Name="listado" Values='0:"PARADO", 1:"CRONOMETRANDO", 2:"PUESTA A CERO"' -->
+    <meta http-equiv="Content-Language" content="es">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <link rel="stylesheet" type="text/css" href="estilos/estilos.css" />
+    <script type="text/javascript">
+        //Actualizamos el contador a tiempos fijos
+        var bRefrescar = false;
+        window.addEventListener('load', (event) => {        
+            setInterval(actualizar, 5000);    
+            console.log('page is fully loaded');
+            let startBtn = document.getElementById("botonStart");
+
+            startBtn.addEventListener("click", (event) => {
+                sendPOST(document.getElementById('arranca'), true);
+            });
+
+            let stopBtn = document.getElementById("botonStop");
+
+            stopBtn.addEventListener("click", (event) => {
+                sendPOST(document.getElementById('para'), false);
+            });
+
+            let resetBtn = document.getElementById("botonReset");
+
+            resetBtn.addEventListener("click", (event) => {
+                sendPOST(document.getElementById('reinicia'), false);
+            });
+                    });
+
+       
+
+        function sendPOST(form, b ) {
+            window.alert(b);
+            bRefrescar = b; 
+            //Le pasa directamente los parámetros contenidos en el FORM
+            const data = new FormData(form);
+            /*Si necesitáramos crear el data a mano:
+             const data = new FormData();
+            data.append('empresa', 'DesarrolloWeb.com');
+            data.append('CIF', 'ESB00001111');
+            data.append('formacion_profesional', 'EscuelaIT'); */
+            curURL = window.location.href;
+            fetch(curURL, {
+                method: 'POST',
+                body: data
+            })
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.text()
+                    } else {
+                        throw "Error en la llamada Ajax";
+                    }
+
+                })
+                .then(function (texto) {
+                    //console.log(texto);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        }
+
+        //Esta función carga en el elemento del DOM lo obtenido desde el GET de la URL pasada como parámetro
+        //Lo que se obtiene es, directamente, un HTML
+        //Podría ser un objeto JSON (response.getjson()), etc.
+        function load(target, url) {
+            
+            fetch(url).then(function (response) {
+                // The API call was successful!
+                return response.text();
+            }).then(function (html) {
+                // This is the HTML from our response as a text string
+                //console.log(html);
+                target.innerHTML = html;
+            }).catch(function (err) {
+                // There was an error
+                console.warn('Something went wrong.', err);
+            });
+
+        }
+
+        function actualizar() {
+            window.alert(bRefrescar);
+            if(bRefrescar){
+                load(document.getElementById("tiempos"),"tiempos.html");
+                load(document.getElementById("textos"), "texto.html");
+            }
+            
+        }
+    </script>
+
+</head>
+
+
+<title>Cronometro</title>
+
+<body>
+
+
+    <div id="ps"><img width="10%"
+            src="https://image.shutterstock.com/image-vector/iron-stopwatch-counts-time-catch-260nw-1709422597.jpg"></img>
+    </div>
+    <div id="textos"></div>
+    <div id="tiempos"></div>
+    <div id="botones">
+        <table>
+            <tr>
+                <td>
+                    <form method="post" action="" id="arranca" name="arranca">
+                        <input type="submit" value="Start" id="botonStart">
+                        <input type="hidden" name='"Start"' value="1">
+                        <input type="hidden" name='"Stop"' value="0">
+                        <input type="hidden" name='"P_marcha"' value="1">
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="" id="para" name="para">
+                        <input type="submit" value="Stop" id="botonStop">
+                        <input type="hidden" name='"Stop"' value="1">
+                        <input type="hidden" name='"Start"' value="0">
+                        <input type="hidden" name='"P_marcha"' value="0">
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="" id="reinicia" name="reinicia">
+                        <input type="submit" value="Reset" id="botonReset">
+                        <input type="hidden" name='"Reset"' value="1">
+                        <input type="hidden" name='"P_marcha"' value="1">
+                    </form>
+                </td>
+            </tr>
+            
+        </table>
+        <table>
+        
+            <tr>                
+                <td></td>
+                <td>Minutos</td>
+                <td>Segundos</td>
+            </tr>
+            <tr>
+                <form method="post" action="">
+                <td><input type="submit" value="Set min." id="botonMin"></td>
+                <td><input type="text" size="2" name='"Minutos"'/></td>
+                <td><input type="text" size="2" name='"Segundos"'/></td>
+                </form>
+            </tr>
+            
+        </table>
+    </div>
+
+
+</body>
+</body>
+
+</html>
